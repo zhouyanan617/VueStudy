@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>组件</title>
+  <style>
+    [v-cloak] {
+      display:none;
+    }
+  </style>
+</head>
+<body>
+  <div id="app" v-cloak>
+    
+  </div>
+  <script src="js/vue.js"></script>
+  <script>
+    let PublicComp = {
+      template:`
+        <div>我是公共组件</div>
+      `
+    };
+    //全局组件注册
+    Vue.component('PublicComp', PublicComp);
+    //首页
+    let HomePage = {
+      template: `
+        <div>
+          {{title}}
+          <PublicComp></PublicComp>
+        </div>
+      `,
+      data() {
+        return {
+          title: '我是首页'
+        }
+      },
+    };
+    //新闻页面
+    let NewsPage = {
+      template:`
+        <div>
+          新闻页面
+          <PublicComp></PublicComp>
+        </div>
+      `
+    }
+    //入口组件
+    let App = { //组件，一个组件就是一个页面
+      template: `
+        <div>
+          <HomePage></HomePage>
+          <NewsPage></NewsPage>
+        </div>
+      `,
+      // 局部组件注册方式
+      components: {
+        HomePage,
+        NewsPage,
+      }
+    };
+    new Vue({
+      el: '#app',
+      template: `
+        <App></App>
+      `,
+      components: {
+        App,
+      }
+    });
+  </script>
+</body>
+</html>

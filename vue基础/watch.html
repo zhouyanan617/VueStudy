@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>watch监听</title>
+  <style>
+    [v-cloak] {
+      display:none;
+    }
+  </style>
+</head>
+<body>
+  <div id="app" v-cloak>
+    <input type="text" :value="name" /><br />
+    <button type="button" @click="classify.title='潮流女装2'">潮流女装</button>
+    <button type="button" @click="name='王五'">{{getName}}</button>
+    <button type="button" @click="name='李四'">获取值</button>
+    <button type="button" @click="classify.children.title='大码女装'">{{classify.children.title}}</button>
+  </div>
+  <script src="js/vue.js"></script>
+  <script>
+    new Vue({
+      el: '#app',
+      data() {
+        return {
+          name: '张三',
+          classify: {
+            title: '潮流女装',
+            children: {
+              title: '女装',
+              children: {
+                title: '男装'
+              }
+            }
+          },
+        }
+      },
+      computed: {
+        getName() {
+          return this.name = '李四';
+        }
+      },
+      watch: {
+        name(newVal, oldVal) { //相当于data里面的name
+          console.log(newVal, oldVal);
+        },
+        'classify.title'(newVal, oldVal) {
+          console.log(newVal, oldVal);
+        },
+        //监听computed里面的属性
+        getName(newVal, oldVal) {
+          console.log(newVal, oldVal);
+        },
+        classify: {
+          handler(val) {
+            console.log(JSON.stringify(val));
+          },
+          deep: true//深度监听
+        }
+      }
+    });
+  </script>
+</body>
+</html>

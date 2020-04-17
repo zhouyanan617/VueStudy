@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>vue</title>
+  <style>
+    [v-cloak] {  /* 解决加载闪烁时出现vue标签或指令符号 */
+      display:none;
+    }
+  </style>
+</head>
+<body>
+  <div id="app" v-cloak>
+    <input type="text" v-model="name" /><br />
+    {{name}}
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.6.11/dist/vue.js"></script>
+  <script>
+    new Vue({
+      el: '#app',
+      //因为vue是单页面应用，是由多个组件组成的，每个组件里面都有data，如果data是个对象，对象是引用类型，一个组件里面的data值改变了，
+      //其他组件的值也都会改变，为了避免出现互相引用的问题，我们要用方法来初始化数据形成一个作用域，防止各个组件互相引用
+      data() {  //vue单页面应用推荐用方法
+        return {
+          name: '张三'
+        }
+      }
+      /* data: {  不用，微信小程序多页面应用可以用
+        name: '李四'
+      } */
+
+    });
+  </script>
+</body>
+</html>

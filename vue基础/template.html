@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>模板语法与常用指令</title>
+  <style>
+    [v-cloak] {
+      display: none;
+    }
+    .box{width:100px;height:100px;background-color:#ff00ff;}
+  </style>
+</head>
+<body>
+  <div id="app" v-cloak>
+    <ul>
+      <li v-for="(item,index) in list" :key="index">
+        {{item.orderName}}、{{item.title}}{{index}}
+        <template v-if="item.type == '0'">待付款</template>
+        <template v-else="item.type == '1'">已付款</template>
+      </li>
+    </ul>
+    <div v-bind:class="{box:true}" v-show="isShow"></div>  <!-- 切换频繁用v-show; v-if操作DOM 订单状态if判断用v-if-->
+    <button type="button" @click="isShow=!isShow">显示/隐藏</button>
+    <div class="content" v-html="content"></div>
+  </div>
+  <script src="./js/vue.js"></script>
+  <script>
+    new Vue({
+      el: '#app',
+      data() {
+        return {
+          list: [
+            {orderName: 1, title: '女装', type: '1'},
+            {orderName: 2, title: '男装', type: '1'},
+            {orderName: 3, title: '鞋', type: '0'},
+            {orderName: 4, title: '包', type: '0'},
+          ],
+          isShow: true,
+          content: '<span style="font-size:20px;color:#ff0000">商品详情</span>'
+        }
+      }
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>todolist案例</title>
+  <style>
+    [v-cloak] {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <div id="app" v-cloak>
+    <input type="text" v-model="title" /><button type="button" @click="addItem()" >添加</button><br /><br />
+    <div>
+      <table width="100%" border="1" cellpadding="0" cellspacing="0">
+        <tr style="color:#ffffff;font-size:16px;">
+          <td height="40" align="center" bgcolor="#0000FF"><label><input type="checkbox" @click="allSelect()" :checked="isAll" />全选</label></td>
+          <td height="40" align="center" bgcolor="#0000FF">标题</td>
+          <td height="40" align="center" bgcolor="#0000FF">管理</td>
+        </tr>
+        <tr style="font-size: 14px;" v-for="(item, index) in listData" :key="index" >
+          <td height="40" align="center"><input type="checkbox" @click="selectItem(index)" :checked="item.checked" /></td>
+          <td height="40" align="center">{{item.title}}</td>
+          <td height="40" align="center" @click="delItem(index)">删除</td>
+        </tr>
+        <tr>
+          <td colspan="3" height="40"><button type="button" @click="allDelItem()" >批量删除</button>&nbsp;&nbsp;
+            <button type="button" @click="submitData()" >提交</button></td>
+        </tr>
+      </table>
+    </div>
+  </div>
+  <script src="./js/vue.js"></script>
+  <script>
+    new Vue({
+      el: '#app',
+      data() {
+        return {
+          title: '',
+          listData: [],
+          isAll: false,
+        }
+      },
+      methods: {
+        //添加
+        addItem() {
+          if (this.title.match(/^\s*$/)) {
+            alert('请输入内容');
+            return;
+          }
+          this.listData.push({title: this.title, checked: false});
+        },
+        //删除
+        delItem(index) {
+          this.listData.splice(index, 1);
+        },
+        //全选
+        allSelect() {
+          this.isAll = !this.isAll;
+          // console.log(this.isAll);
+          if (this.listData.length > 0) {
+            for (let i = 0; i < this.listData.length; i++) {
+              this.listData[i].checked = this.isAll;
+            }
+          }
+        },
+        //批量删除
+        allDelItem() {
+          // console.log(JSON.stringify(this.listData));
+          if (this.listData.length > 0) {
+            for (let i = 0; i < this.listData.length; i++) {
+              if (this.listData[i].checked) {
+                this.listData.splice(i--, 1);
+              }
+            }
+          }
+          this.checkedAllSelect();
+        },
+        //选择数据
+        selectItem(index) {
+          this.listData[index].checked = !this.listData[index].checked;
+          // console.log(this.listData[index].checked);
+          //set解决数据变化，视图不渲染，是一个异步   全部的改变不需要，数组里面单一的值改变才需要
+          //第一个参数是原数据，第二个参数是索引，第三个参数是新数据（改变后的数据）
+
+          //Vue.set();
+          this.$set(this.listData, index, this.listData[index]);
+          this.checkedAllSelect();
+        },
+        //检测是否全选
+        checkedAllSelect() {
+          let isAll = true;
+          if (this.listData.length > 0) {
+            for (let i = 0; i < this.listData.length; i++) {
+              if (!this.listData[i].checked) {
+                isAll = false;
+                break;
+              }
+            }
+          } else {
+            isAll = false;
+          }
+          this.isAll = isAll;
+        },
+        //提交数据
+        submitData() {
+          let data = [];
+          if (this.listData.length > 0) {
+            for (let i = 0; i < this.listData.length; i++) {
+              if (this.listData[i].checked) {
+                data.push(this.listData[i]);
+              }
+            }
+          }
+          alert(JSON.stringify(data));
+        },
+      }
+    });
+  </script>
+</body>
+</html>

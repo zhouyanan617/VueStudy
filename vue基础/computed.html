@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>computed计算</title>
+  <style>
+    [v-cloak] {
+      display:none;
+    }
+  </style>
+</head>
+<body>
+  <div id="app" v-cloak>
+   商品：苹果电脑<br />
+   价格：{{price}}<br />
+   数量：<button type="button" @click="--amount" >-</button><input style="width: 40px;" type="text" v-model="amount" />
+    <button type="button" @click="++amount" >+</button><br />
+   金额：{{total}}
+  </div>
+  <script src="js/vue.js"></script>
+  <script>
+    new Vue({
+      el: '#app',
+      data() {
+        return {
+          price: 17000,
+          amount: 1,
+        }
+      },
+      computed: {
+        total() { //调用的时候不能用()，定义按这样写，不按方法调用
+          let total = this.amount * this.price;
+          return total;
+        }
+      },
+    });
+  </script>
+</body>
+</html>

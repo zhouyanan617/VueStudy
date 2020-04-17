@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>事件</title>
+  <style>
+    [v-cloak] {
+      display: none;
+    }
+    .list{width: 500px;height: 25px;margin-bottom: 10px;}
+    .list.active{background-color: red;color: #ffffff;}
+    .box{width: 100px;height: 100px;background-color: blue;position: absolute;z-index: 1;}
+    .box.active{background-color: red;}
+  </style>
+</head>
+<body>
+  <div id="app" v-cloak>
+    <ul>
+      <li :class="{list:true,active:item.active}" v-for="(item, index) in list" :key="index" @click="checkedItem(index)">
+        {{item.name}} <button @click.stop="delItem(index)">删除</button></li>
+    </ul>
+    <!-- <button @click.once="submitOrder()">提交订单</button> -->
+    <button @click="submitOrder()">提交订单</button>
+    <div :class="{box:true,active:isActive}" @mouseover="isActive=true" @mouseout="isActive=false" @mousemove="moveBox($event)"
+      :style="{left:moveX,top:moveY}" @touchmove="touchmoveBox($event)" @touchstart="touchstartBox($event)" @touchend="touchendBox()" ></div>
+    <input type="text" @keyup.enter="submit($event)" v-model="url" />
+  </div>
+  <script src="./js/vue.js"></script>
+  <script>
+    new Vue({
+      el: '#app',
+      data() {
+        return {
+          list: [
+            {id: 1, name: '张三', age: '28', active: false},
+            {id: 2, name: '李四', age: '18', active: false},
+            {id: 3, name: '王五', age: '38', active: false},
+          ],
+          isSubmit: true,
+          isActive: false,
+          moveX: 0,
+          moveY: 0,
+          startX: 0,
+          startY: 0,
+          url: '',
+        }
+      },
+      methods: {
+        checkedItem(index) {
+          // console.log(index);
+          this.list[index].active = !this.list[index].active;
+        },
+        delItem(index) {
+          // console.log('删除');
+          if (confirm("确认要删除吗？")) {
+            this.list.splice(index, 1);
+          }
+        },
+        submitOrder() {
+          //只提交一次
+          if (this.isSubmit) {
+            this.isSubmit = false;
+            alert('提交订单');
+          }
+        },
+        moveBox(e) {
+          // console.log(e);
+        },
+        touchstartBox(e) {
+          // console.log(this.moveX);
+          this.isActive = false;
+          this.startX = e.touches[0].pageX - parseInt(this.moveX);
+          this.startY = e.touches[0].pageY - parseInt(this.moveY);
+          // console.log(this.startX, this.startY);
+        },
+        touchmoveBox(e) {
+          this.moveX = e.touches[0].pageX - this.startX + 'px';
+          this.moveY = e.touches[0].pageY - this.startY + 'px';
+          // console.log(e);
+        },
+        touchendBox() {
+          this.isActive = true;
+        },
+        submit(e) {
+          window.open(this.url);
+          // console.log(e);
+        },
+      }
+    });
+  </script>
+</body>
+</html>
